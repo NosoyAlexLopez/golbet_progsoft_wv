@@ -155,16 +155,24 @@
 
         <small class="text-muted">🎟️ @Model.TotalBets apuestas realizadas</small>
 
-        @if (Model.Status == MatchStatus.Scheduled)
+        <div>
 
-        {
-            <button class="btn btn-success" disabled
-                    title="Disponible cuando implementemos las apuestas">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Editar</a>
 
-                Apostar (Pendiente por codear)
-            </button>
+            @if (Model.Status == MatchStatus.Scheduled)
 
-        }
+            {
+
+                <button class="btn btn-success" disabled
+                        title="Disponible cuando implementemos las apuestas">
+
+                    Apostar (Módulo 8)
+
+                </button>
+
+            }
+
+        </div>
 
     </div>
 

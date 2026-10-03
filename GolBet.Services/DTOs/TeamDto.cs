@@ -1,4 +1,7 @@
-﻿public class TeamDto
+﻿
+namespace GolBet.Services.DTOs;
+
+public class TeamDto
 
 {
     public int Id { get; set; }
