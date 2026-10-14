@@ -6,13 +6,10 @@ using GolBet.Repositories.Interfaces;
 using GolBet.Services.DTOs;
 using GolBet.Services.Helpers;
 using GolBet.Services.Interfaces;
-
 namespace GolBet.Services.Implementations;
-
 public class MatchService : IMatchService
 
 {
-
     private readonly IMatchRepository _matchRepository;
     private readonly IMapper _mapper;
 

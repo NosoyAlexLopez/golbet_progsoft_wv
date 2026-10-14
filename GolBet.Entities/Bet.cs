@@ -1,8 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations.Schema;
-
 using GolBet.Entities.Common;
-
 using GolBet.Entities.Enums;
 
 namespace GolBet.Entities;
@@ -10,12 +8,8 @@ namespace GolBet.Entities;
 public class Bet : AuditableEntity
 
 {
-
     [Column(TypeName = "decimal(12,2)")]
-
     public decimal Amount { get; set; }
-
-
 
     /// <summary>Odds frozen at placement time. Admin odds changes never affect placed bets.</summary> 
 
@@ -23,22 +17,14 @@ public class Bet : AuditableEntity
 
     public decimal OddsAtPlacement { get; set; }
 
-
-
     public BetPick Pick { get; set; }
 
-
-
     public BetStatus Status { get; set; } = BetStatus.Pending;
-
-
 
     public int MatchId { get; set; }
 
     public Match Match { get; set; } = null!;
-
-
-
-    // Module 7 will add:  public string UserId  +  AppUser User 
+    public string UserId { get; set; } = null!;   // FK -> AspNetUsers (string PK) 
+    public AppUser User { get; set; } = null!;    // navigation property 
 
 }
