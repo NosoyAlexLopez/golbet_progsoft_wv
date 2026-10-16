@@ -8,27 +8,21 @@ using GolBet.Services.Helpers;
 using GolBet.Services.Interfaces;
 namespace GolBet.Services.Implementations;
 public class MatchService : IMatchService
-
 {
     private readonly IMatchRepository _matchRepository;
     private readonly IMapper _mapper;
-
     public MatchService(IMatchRepository matchRepository, IMapper mapper)
 
     {
-
         _matchRepository = matchRepository;
         _mapper = mapper;
-
     }
 
     public async Task<IEnumerable<MatchDto>> GetBoardAsync(MatchStatus? status = null)
 
     {
-
         var matches = await _matchRepository.GetAllWithTeamsAsync(status);
         return _mapper.Map<IEnumerable<MatchDto>>(matches);
-
     }
     public async Task<MatchDetailDto?> GetDetailAsync(int id)
 
@@ -36,12 +30,10 @@ public class MatchService : IMatchService
 
         var match = await _matchRepository.GetByIdWithDetailsAsync(id);
         return match is null ? null : _mapper.Map<MatchDetailDto>(match);
-
     }
     public async Task<MatchFormDto?> GetForEditAsync(int id)
 
     {
-
         var match = await _matchRepository.GetByIdAsync(id);
         if (match is null) return null;
 
@@ -50,21 +42,13 @@ public class MatchService : IMatchService
         return dto;
 
     }
-
-
-
     public async Task CreateAsync(MatchFormDto dto)
-
     {
-
         ValidateBusinessRules(dto);
-
-
 
         var match = _mapper.Map<Match>(dto);
         match.Date = dto.Date.ToUtcFromColombia();   // local (form) -> UTC (DB) 
         await _matchRepository.AddAsync(match);
-
     }
 
     public async Task UpdateAsync(MatchFormDto dto)
@@ -72,10 +56,8 @@ public class MatchService : IMatchService
     {
         ValidateBusinessRules(dto);
 
-
         var match = await _matchRepository.GetByIdAsync(dto.Id)
             ?? throw new KeyNotFoundException($"Match {dto.Id} not found.");
-
 
 
         _mapper.Map(dto, match);
@@ -83,20 +65,14 @@ public class MatchService : IMatchService
         await _matchRepository.UpdateAsync(match);
 
     }
-
-
-
     public async Task DeactivateAsync(int id)
         => await _matchRepository.DeactivateAsync(id);
-
     // ---- Business rules (Guía, regla #1 y afines) ---- 
 
     private static void ValidateBusinessRules(MatchFormDto dto)
-
     {
 
         if (dto.HomeTeamId == dto.AwayTeamId)
-
             throw new InvalidOperationException(
 
                 "El equipo local y el visitante no pueden ser el mismo.");
@@ -104,6 +80,13 @@ public class MatchService : IMatchService
         if (dto.Date.ToUtcFromColombia() <= DateTime.UtcNow)
             throw new InvalidOperationException(
                 "La fecha del partido debe ser futura.");
+    }
 
+
+    //spread the parameters by alexander lopez
+    public async Task<IEnumerable<MatchDto>> GetBoardAsync(MatchStatus? status = null, string? search = null)
+    {
+        var matches = await _matchRepository.GetAllWithTeamsAsync(status, search);
+        return _mapper.Map<IEnumerable<MatchDto>>(matches);
     }
 }
